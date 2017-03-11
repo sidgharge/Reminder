@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView empty;
     // private SimpleCursorAdapter cursorAdapter;
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private ReminderAdapter adapter;
 
     @Override
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.reminderList);
-        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
         adapter = new ReminderAdapter(this, cursor, mRecyclerView);
         mRecyclerView.setAdapter(adapter);
