@@ -20,11 +20,11 @@ import java.text.SimpleDateFormat;
  * Created by kyle on 22/09/16.
  */
 
-public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHolder> {
+public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {
 
     private Context mContext;
     private Cursor mCursor;
-    private reminderDatabase database;
+    private ReminderDatabase database;
     private RecyclerView mRecyclerView;
     public View.OnClickListener mListener = new reminderClickListener();
     public View.OnLongClickListener mLongListener = new reminderLongClickListener();
@@ -48,11 +48,11 @@ public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHo
         }
     }
 
-    public reminderAdapter(Context context, Cursor cursor, RecyclerView recyclerView) {
+    public ReminderAdapter(Context context, Cursor cursor, RecyclerView recyclerView) {
         mContext = context;
         mCursor = cursor;
         mRecyclerView = recyclerView;
-        database = new reminderDatabase(mContext);
+        database = new ReminderDatabase(mContext);
     }
 
     private Context getContext() {
@@ -61,7 +61,7 @@ public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHo
 
     // inflating layout from XML and returning the holder
     @Override
-    public reminderAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReminderAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -85,12 +85,12 @@ public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHo
 
     // Populating the items in the holder
     @Override
-    public void onBindViewHolder(reminderAdapter.ViewHolder viewHolder, int id) {
+    public void onBindViewHolder(ReminderAdapter.ViewHolder viewHolder, int id) {
         mCursor.moveToPosition(id);
 
-        String type = mCursor.getString(mCursor.getColumnIndex(reminderDatabase.DB_COLUMN_TYPE));
+        String type = mCursor.getString(mCursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TYPE));
         if (type.equalsIgnoreCase("alert")) {
-            viewHolder.time.setText(timeFormat.format(mCursor.getLong(mCursor.getColumnIndex(reminderDatabase.DB_COLUMN_TIME))));
+            viewHolder.time.setText(timeFormat.format(mCursor.getLong(mCursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TIME))));
             viewHolder.icon.setImageResource(R.drawable.ic_bell_ring_grey600_18dp);
             viewHolder.time.setVisibility(View.VISIBLE);
             viewHolder.icon.setVisibility(View.VISIBLE);
@@ -99,8 +99,8 @@ public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHo
             viewHolder.icon.setVisibility(View.GONE);
         }
 
-        viewHolder.title.setText(mCursor.getString(mCursor.getColumnIndex(reminderDatabase.DB_COLUMN_TITLE)));
-        viewHolder.content.setText(mCursor.getString(mCursor.getColumnIndex(reminderDatabase.DB_COLUMN_CONTENT)));
+        viewHolder.title.setText(mCursor.getString(mCursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TITLE)));
+        viewHolder.content.setText(mCursor.getString(mCursor.getColumnIndex(ReminderDatabase.DB_COLUMN_CONTENT)));
 
 
     }
@@ -127,7 +127,7 @@ public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHo
                         mRecyclerView.removeViewAt(position);
 
                         // if the selected item for deletion is an alert, cancel the alarm
-                        if ((cursor.getString(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_TYPE)).equals("alert"))) {
+                        if ((cursor.getString(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TYPE)).equals("alert"))) {
                             Intent delete = new Intent(mContext, AlarmService.class);
                             delete.putExtra("id", deleteId);
                             delete.putExtra("deletedFromMain", true);
@@ -163,13 +163,13 @@ public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHo
             int position = mRecyclerView.getChildAdapterPosition(view);
             mCursor.moveToPosition(position);
             Intent intent;
-            String type = mCursor.getString(mCursor.getColumnIndex(reminderDatabase.DB_COLUMN_TYPE));
+            String type = mCursor.getString(mCursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TYPE));
             if (type.equalsIgnoreCase("alert")) {
-                intent = new Intent(mContext, createOrEditAlert.class);
+                intent = new Intent(mContext, CreateOrEditAlert.class);
             } else {
-                intent = new Intent(mContext, createOrEditNote.class);
+                intent = new Intent(mContext, CreateOrEditNote.class);
             }
-            intent.putExtra("ID", mCursor.getInt(mCursor.getColumnIndex(reminderDatabase.DB_COLUMN_ID)));
+            intent.putExtra("ID", mCursor.getInt(mCursor.getColumnIndex(ReminderDatabase.DB_COLUMN_ID)));
             mContext.startActivity(intent);
         }
     }
@@ -178,7 +178,7 @@ public class reminderAdapter extends RecyclerView.Adapter<reminderAdapter.ViewHo
         public boolean onLongClick(View view) {
             int position = mRecyclerView.getChildAdapterPosition(view);
             mCursor.moveToPosition(position);
-            int id = mCursor.getInt(mCursor.getColumnIndex(reminderDatabase.DB_COLUMN_ID));
+            int id = mCursor.getInt(mCursor.getColumnIndex(ReminderDatabase.DB_COLUMN_ID));
             deleteDialog(id, position).show();
             return true;
         }

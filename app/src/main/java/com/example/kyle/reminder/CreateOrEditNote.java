@@ -12,9 +12,9 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 
-public class createOrEditNote extends AppCompatActivity {
+public class CreateOrEditNote extends AppCompatActivity {
     private EditText title, content;
-    private reminderDatabase database;
+    private ReminderDatabase database;
     private int id = 0;
 
     @Override
@@ -22,7 +22,7 @@ public class createOrEditNote extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_edit_note);
-        database = new reminderDatabase(this);
+        database = new ReminderDatabase(this);
 
         Intent intent = getIntent();
         id = intent.getIntExtra("ID", 0);
@@ -33,8 +33,8 @@ public class createOrEditNote extends AppCompatActivity {
         if (id > 0) {
             Cursor cursor = database.getItem(id);
             cursor.moveToFirst();
-            String contentString = cursor.getString(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_CONTENT));
-            String titleString = cursor.getString(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_TITLE));
+            String contentString = cursor.getString(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_CONTENT));
+            String titleString = cursor.getString(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TITLE));
             content.setText(contentString);
             title.setText(titleString);
             getSupportActionBar().setTitle("Edit Note");

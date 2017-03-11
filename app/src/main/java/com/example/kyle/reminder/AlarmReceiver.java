@@ -27,13 +27,13 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         String title = intent.getStringExtra("title");
         String msg = intent.getStringExtra("msg");
 
-        reminderDatabase database = new reminderDatabase(context);
+        ReminderDatabase database = new ReminderDatabase(context);
         Cursor cursor = database.getItem(id);
         cursor.moveToFirst();
 
-        int frequency = cursor.getInt(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_FREQUENCY));
+        int frequency = cursor.getInt(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_FREQUENCY));
         Calendar time = Calendar.getInstance();
-        time.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_TIME)));
+        time.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TIME)));
 
         if (frequency > 0) {
             if (frequency == HOURLY) {
@@ -58,10 +58,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
             context.startService(setAlarm);
         }
 
-        Intent result = new Intent(context, createOrEditAlert.class);
+        Intent result = new Intent(context, CreateOrEditAlert.class);
         result.putExtra("ID", id);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(createOrEditAlert.class);
+        stackBuilder.addParentStack(CreateOrEditAlert.class);
         stackBuilder.addNextIntent(result);
         PendingIntent clicked = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 

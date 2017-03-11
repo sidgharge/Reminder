@@ -44,19 +44,19 @@ public class AlarmService extends IntentService {
     private void execute(String action, int id, boolean deletedFromMain) {
 
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        reminderDatabase database = new reminderDatabase(this);
+        ReminderDatabase database = new ReminderDatabase(this);
         Cursor cursor = database.getItem(id);
         cursor.moveToFirst();
 
         Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("id", cursor.getInt(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_ID)));
-        intent.putExtra("title", cursor.getString(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_TITLE)));
-        intent.putExtra("msg", cursor.getString(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_CONTENT)));
+        intent.putExtra("id", cursor.getInt(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_ID)));
+        intent.putExtra("title", cursor.getString(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TITLE)));
+        intent.putExtra("msg", cursor.getString(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_CONTENT)));
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long timeInMilliseconds = cursor.getLong(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_TIME));
+        long timeInMilliseconds = cursor.getLong(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TIME));
 
         if (CREATE.equals(action)) {
             alarm.setExact(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pendingIntent);

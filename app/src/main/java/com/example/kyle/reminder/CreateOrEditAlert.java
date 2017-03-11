@@ -31,10 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class createOrEditAlert extends AppCompatActivity {
+public class CreateOrEditAlert extends AppCompatActivity {
 
     private SimpleAdapter adapter;
-    private reminderDatabase database;
+    private ReminderDatabase database;
     private EditText content, title;
     private String time, date;
     private int id, repeatMode;
@@ -57,7 +57,7 @@ public class createOrEditAlert extends AppCompatActivity {
         item2 = new HashMap<String, String>();
         item3 = new HashMap<String, String>();
 
-        database = new reminderDatabase(this);
+        database = new ReminderDatabase(this);
         content = (EditText) findViewById(R.id.alertContent);
         title = (EditText) findViewById(R.id.alertTitle);
 
@@ -77,13 +77,13 @@ public class createOrEditAlert extends AppCompatActivity {
             Cursor cursor = database.getItem(id);
             cursor.moveToFirst();
             String contentString = cursor.getString(cursor.getColumnIndex
-                    (reminderDatabase.DB_COLUMN_CONTENT));
-            String titleString = cursor.getString(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_TITLE));
+                    (ReminderDatabase.DB_COLUMN_CONTENT));
+            String titleString = cursor.getString(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TITLE));
             content.setText(contentString);
             title.setText(titleString);
 
-            long timeInMilliseconds = cursor.getLong(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_TIME));
-            repeatMode = cursor.getInt(cursor.getColumnIndex(reminderDatabase.DB_COLUMN_FREQUENCY));
+            long timeInMilliseconds = cursor.getLong(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_TIME));
+            repeatMode = cursor.getInt(cursor.getColumnIndex(ReminderDatabase.DB_COLUMN_FREQUENCY));
             alertTime.setTimeInMillis(timeInMilliseconds);
             DateFormat df = new SimpleDateFormat("hh:mm aa");
             DateFormat df1 = new SimpleDateFormat("dd/MM/yy");
@@ -175,7 +175,7 @@ public class createOrEditAlert extends AppCompatActivity {
 
     // time picker
     private TimePickerDialog timePicker() {
-        return new TimePickerDialog(createOrEditAlert.this,
+        return new TimePickerDialog(CreateOrEditAlert.this,
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
@@ -191,7 +191,7 @@ public class createOrEditAlert extends AppCompatActivity {
 
     // date picker
     private DatePickerDialog datePicker() {
-        DatePickerDialog datePicker = new DatePickerDialog(createOrEditAlert.this,
+        DatePickerDialog datePicker = new DatePickerDialog(CreateOrEditAlert.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -225,7 +225,7 @@ public class createOrEditAlert extends AppCompatActivity {
 
                         // if item exists, cancel previous alarm, update alert, then set new alarm
                         if (saveId > 0) {
-                            Intent cancelPrevious = new Intent(createOrEditAlert.this,
+                            Intent cancelPrevious = new Intent(CreateOrEditAlert.this,
                                     AlarmService.class);
                             cancelPrevious.putExtra("id", saveId);
                             cancelPrevious.setAction(AlarmService.CANCEL);
@@ -266,7 +266,7 @@ public class createOrEditAlert extends AppCompatActivity {
 
                         if (deleteId > 0) {
                             // delete the alarm
-                            Intent delete = new Intent(createOrEditAlert.this, AlarmService.class);
+                            Intent delete = new Intent(CreateOrEditAlert.this, AlarmService.class);
                             delete.putExtra("id", deleteId);
                             delete.setAction(AlarmService.DELETE);
                             startService(delete);

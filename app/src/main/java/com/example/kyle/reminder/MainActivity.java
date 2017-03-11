@@ -19,12 +19,12 @@ import com.github.clans.fab.FloatingActionMenu;
 
 public class MainActivity extends AppCompatActivity {
 
-    private reminderDatabase database;
+    private ReminderDatabase database;
     private TextView empty;
     // private SimpleCursorAdapter cursorAdapter;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private reminderAdapter adapter;
+    private ReminderAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // sets listView in mainActivity to contents of database
-        database = new reminderDatabase(this);
+        database = new ReminderDatabase(this);
         final Cursor cursor = database.getAllItems();
 
         //broadcastManager to wait for AlarmService to finish
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.reminderList);
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter = new reminderAdapter(this, cursor, mRecyclerView);
+        adapter = new ReminderAdapter(this, cursor, mRecyclerView);
         mRecyclerView.setAdapter(adapter);
 
         empty = (TextView) findViewById(R.id.empty);
@@ -62,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
         addAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), createOrEditAlert.class));
+                startActivity(new Intent(view.getContext(), CreateOrEditAlert.class));
             }
         });
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), createOrEditNote.class));
+                startActivity(new Intent(view.getContext(), CreateOrEditNote.class));
             }
         });
     }
